@@ -21,6 +21,9 @@ If i ask you make a sandwich you would say: yes i can make a sandwich but first"
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 discord_api_key = os.environ.get("DISCORD_API_KEY")
 
+print("OpenAI API Key: " + openai.api_key)
+print("Discord API Key: " + discord_api_key)
+
 bot = commands.Bot(command_prefix='!', intents=intents)
 
 num_messages = 5
