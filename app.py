@@ -1,8 +1,11 @@
 import discord
 import openai
 import os
+import logging
 from discord.ext import commands
 import asyncio
+
+logging.basicConfig(level=logging.INFO)
 
 intents = discord.Intents.default()
 
@@ -21,8 +24,8 @@ If i ask you make a sandwich you would say: yes i can make a sandwich but first"
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 discord_api_key = os.environ.get("DISCORD_API_KEY")
 
-print("OpenAI API Key: " + openai.api_key)
-print("Discord API Key: " + discord_api_key)
+logging.info(f"OpenAI API Key: {openai.api_key}")
+logging.info(f"Discord API Key: {discord_api_key}")
 
 bot = commands.Bot(command_prefix='!', intents=intents)
 
@@ -47,7 +50,7 @@ async def ping(ctx):
 
 @bot.event
 async def on_ready():
-    print(f'{bot.user.name} has connected to Discord!')
+    logging.info(f'{bot.user.name} has connected to Discord!')
 
 @bot.event
 async def on_message(message):
@@ -75,7 +78,7 @@ async def on_message(message):
         "content": system_message
     }] + messages
 
-    print(messages)
+    logging.info(messages)
 
     loop = asyncio.get_event_loop()
 
