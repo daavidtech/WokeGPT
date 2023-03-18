@@ -31,7 +31,7 @@ jobs:
         context: .
         file: ./Dockerfile
         push: false
-        tags: ${{ secrets.DOCKER_USERNAME }}/cringe_radio:${{ steps.get_tag.outputs.tag || github.sha }}
+        tags: ${{ secrets.DOCKER_USERNAME }}/wokegpt:${{ steps.get_tag.outputs.tag || github.sha }}
 
     - name: Push Docker image
       if: success()
@@ -40,4 +40,4 @@ jobs:
         context: .
         file: ./Dockerfile
         push: true
-        tags: ${{ secrets.DOCKER_USERNAME }}/cringe_radio:${{ steps.get_tag.outputs.tag || github.sha }}
+        tags: ${{ secrets.DOCKER_USERNAME }}/wokegpt:${{ steps.get_tag.outputs.tag || github.sha }}
