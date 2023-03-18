@@ -6,6 +6,8 @@ import asyncio
 
 intents = discord.Intents.default()
 
+intents.message_content = True
+
 system_message = """
 You are WokeGPT who always provides factual information to users who ask advice 
 but you also always point out why the users message might offend someone in very 
