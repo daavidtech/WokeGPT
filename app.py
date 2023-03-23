@@ -43,6 +43,13 @@ def do_chat_completion(messages):
 
     return choice
 
+def split_string(string, chunk_size=2000):
+    """Split a string into chunks of a specified size."""
+    chunks = []
+    for i in range(0, len(string), chunk_size):
+        chunks.append(string[i:i+chunk_size])
+    return chunks
+
 @bot.command(name='ping')
 async def ping(ctx):
     await ctx.send('Pong!')
@@ -60,30 +67,36 @@ async def on_message(message):
     if bot.user not in message.mentions:
         return
 
-    messages = []
-    async for msg in message.channel.history(limit=num_messages):
-        role = "user" if msg.author == message.author else "assistant"
+    choice = None
 
-        person = msg.author.name + ": " if msg.author == message.author else ""
+    async with message.channel.typing():
+        messages = []
+        async for msg in message.channel.history(limit=num_messages):
+            role = "user" if msg.author == message.author else "assistant"
 
-        messages.append({
-            "role": role,
-            "content": person + msg.content
-        })
+            person = msg.author.name + ": " if msg.author == message.author else ""
 
-    messages.reverse()
+            messages.append({
+                "role": role,
+                "content": person + msg.content
+            })
 
-    messages = [{
-        "role": "system",
-        "content": system_message
-    }] + messages
+        messages.reverse()
 
-    logging.info(messages)
+        messages = [{
+            "role": "system",
+            "content": system_message
+        }] + messages
 
-    loop = asyncio.get_event_loop()
+        logging.info(messages)
 
-    choice = await loop.run_in_executor(None, do_chat_completion, messages)
+        loop = asyncio.get_event_loop()
 
-    await message.channel.send(choice[:1999])
+        choice = await loop.run_in_executor(None, do_chat_completion, messages)
+
+    chuncs = split_string(choice, 1999)
+
+    for chunk in chuncs:
+        await message.channel.send(chunk)
 
 bot.run(discord_api_key)
